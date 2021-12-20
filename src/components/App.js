@@ -20,7 +20,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.tokenCheck();
-    // проверить токен пользователя!
+    // проверить токен пользователя
   }
   handleLogin(e) {
     e.preventDefault();
