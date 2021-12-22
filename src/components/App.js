@@ -3,33 +3,28 @@ import Profile from "./profile/Profile";
 import Register from "./register/Register ";
 import Login from "./login/Login ";
 //import PageNotFound from "./PageNotFound";
-import { Route, Switch, Redirect, withRouter } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 //import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import ProtectedRoute from "./ProtectedRoute";
 import * as auth from "./auth.js";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loggedIn: false,
-    };
-    this.handleLogin = this.handleLogin.bind(this);
-    this.tokenCheck = this.tokenCheck.bind(this);
-  }
+const App = () => {
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
+  const [userData, setUserData] = React.useState({
+    email: "",
+    password: "",
+  });
+
+  /*
   componentDidMount() {
     this.tokenCheck();
     // проверить токен пользователя
   }
-  handleLogin(e) {
-    e.preventDefault();
-    this.setState({
-      loggedIn: true,
-    });
-  }
+  */
 
-  tokenCheck() {
+  const tokenCheck = () => {
+    /*
     // если у пользователя есть токен в localStorage,
     // эта функция проверит валидность токена
     const jwt = localStorage.getItem("jwt");
@@ -37,16 +32,16 @@ class App extends React.Component {
       // проверим токен
       auth.getContent(jwt).then((res) => {
         if (res) {
-                          // здесь можем получить данные пользователя!
-        const userData = {
-          password: res.password,
-          email: res.email
-        }
+          // здесь можем получить данные пользователя!
+          const userData = {
+            password: res.password,
+            email: res.email,
+          };
           // авторизуем пользователя
           this.setState(
             {
               loggedIn: true,
-              userData // поместим их в стейт внутри App.js
+              userData, // поместим их в стейт внутри App.js
             },
             () => {
               // обернём App.js в withRouter
@@ -56,37 +51,56 @@ class App extends React.Component {
           );
         }
       });
-    }
-  }
+    } */
+  };
 
-  render() {
-    return (
-      <Switch>
-        <ProtectedRoute
-          path="/profile"
-          loggedIn={this.state.loggedIn}
-          userData={this.state.userData}
-          component={Profile}
-        />
-        <Route path="/sign-up">
-          <Register />
-        </Route>
-        <Route path="/sign-in">
-          <Login handleLogin={this.handleLogin} />
-        </Route>
-        <Route exact path="/">
-          {this.state.loggedIn ? (
-            <Redirect to="/profile" />
-          ) : (
-            <Redirect to="/sign-in" />
-          )}
-        </Route>
-      </Switch>
-    );
-  }
-}
+  const handleLogin = ({ email, password }) => {
+    console.log(email, password);
+    // e.preventDefault(); если будешь писать то дбавь (e) как аргумент
+  };
 
-export default withRouter(App);
+  const handleRegister = ({ email, password }) => {
+    console.log(email, password);
+    auth
+      .register({ email, password })
+      .then(res => console.log(res))
+      /*
+      .then((data) => {
+        if (data.jwt) {
+          const { jwt, email, password } = data;
+          localStorage.setItem("jwt", jwt);
+          setUserData({
+            email,
+            password,
+          });
+          setLoggedIn(true);
+        }
+      }) */
+      .catch((error) => console.error(error));
+  };
+
+  return (
+    <Switch>
+      <ProtectedRoute
+        path="/profile"
+        loggedIn={loggedIn}
+        userData={userData}
+        component={Profile}
+      />
+      <Route path="/sign-up">
+        <Register onRegister={handleRegister} />
+      </Route>
+      <Route path="/sign-in">
+        <Login onLogin={handleLogin} tokenCheck={tokenCheck} />
+      </Route>
+      <Route exact path="/">
+        {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
+      </Route>
+    </Switch>
+  );
+};
+
+export default App;
 
 /* <Route path="*">
           <PageNotFound />
