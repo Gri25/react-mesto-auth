@@ -1,13 +1,15 @@
 import logo from "../../images/Vector.svg";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-function Header(props) {
+function Header({ onLogout, userData }, props) {
+  const history = useHistory();
+ // let { email, password } = userData;
   const onHeaderPopup = () => {
     props.onHeaderPopup();
   };
-  function signOut() {
-    localStorage.removeItem("jwt");
-  }
+  //function signOut() {
+  //  localStorage.removeItem("jwt");
+  //}
 
   return (
     <header className="header">
@@ -20,10 +22,10 @@ function Header(props) {
         onClick={onHeaderPopup}
       ></button>
       <div className="header__bar">
-        <p className="header__mail">EMAIL</p>
-        <Link onClick={signOut} to="/sign-in" className="header__out">
+        <p className="header__mail">{userData.email}</p>
+        <button onClick={onLogout}  className="header__out">
           Выйти
-        </Link>
+        </button>
       </div>
     </header>
   );

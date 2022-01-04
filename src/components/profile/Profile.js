@@ -12,8 +12,10 @@ import HeaderPopup from "./HeaderPopup";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 //не могу понять как реализовать плавное закрытие хедер попапа на 320px, додумался только до плавного открытия через кейфрейм
-// если есть идеи, подскажите пожалуйста 
-function Profile() {
+// если есть идеи, подскажите пожалуйста
+function Profile({ userData, onLogout }) {
+  
+
   const [currentUser, setcurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
@@ -143,10 +145,16 @@ function Profile() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <HeaderPopup isOpen={ishandleHeaderPopupClick} onClose={closeAllPopups} />
-      <Header
-      onHeaderPopup={handleHeaderPopupClick}
+      <HeaderPopup 
       isOpen={ishandleHeaderPopupClick}
+      onClose={closeAllPopups} 
+      onLogout={onLogout}
+      />
+      <Header
+        onHeaderPopup={handleHeaderPopupClick}
+        isOpen={ishandleHeaderPopupClick}
+        onLogout={onLogout}
+        userData={userData}
       />
       <Main
         onEditProfile={handleEditProfileClick}

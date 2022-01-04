@@ -16,20 +16,21 @@ const App = () => {
     password: "",
   });
 
-  const history = useHistory()
+  console.log(userData)
+
+  const history = useHistory();
 
   useEffect(() => {
     if (loggedIn === true) {
-      history.push('/profile')
+      history.push("/profile");
     }
-  }, [loggedIn])
+  }, [loggedIn]);
 
   useEffect(() => {
-    tokenCheck()
-  }, [])
+    tokenCheck();
+  }, []);
 
   const tokenCheck = () => {
-    
     // если у пользователя есть токен в localStorage,
     // эта функция проверит валидность токена
     const token = localStorage.getItem("token");
@@ -42,49 +43,57 @@ const App = () => {
             email: data.email,
             password: data.password,
           };
-          localStorage.setItem("token", token)
-          setUserData(userData)
-          setLoggedIn(true)
+          localStorage.setItem("token", token);
+          setUserData(userData);
+          setLoggedIn(true);
         }
       });
-    } 
+    }
   };
 
   const handleLogin = ({ email, password }) => {
     console.log(email, password);
-    // e.preventDefault(); если будешь писать то дбавь (e) как аргумент
-    auth.authorize({
-      email,
-      password
-    })
-    .then(data => console.log(data))
-  //  .then(token => {
-    //  if (token) {
-     //  setLoggedIn(true);не понятно поему не меняется
-   //   }
-   // })
-    .catch(error => console.error(error))
+    auth
+      .authorize({
+        email,
+        password,
+      })
+      .then((data) => {
+        if (data) {
+          localStorage.setItem("token", data.token);
+          setLoggedIn(true);
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   const handleRegister = ({ email, password }) => {
-    console.log(email, password);
+  //  console.log(email, password);
     auth
       .register({ email, password })
-      .then((res) => console.log(res))
-      
       .then((data) => {
         if (data) {
-          const { email, password } = data;
-        //  localStorage.setItem("token", token);
+          const { email } = data;
           setUserData({
             email,
             password,
           });
-         // setLoggedIn(true);тут вроде бы как это не нужно писать
+        //  console.log(data);
+          history.push("/sign-in");
         }
-      }) 
-      
+      })
       .catch((error) => console.error(error));
+    // тут видимо что-то нужно написать для попапа
+  };
+
+  const handleLogout = () => {
+    //  console.log('Logout');
+    localStorage.removeItem("token");
+    setUserData({
+      email: "",
+      password: "",
+    });
+    setLoggedIn(false);
   };
 
   return (
@@ -94,6 +103,7 @@ const App = () => {
         loggedIn={loggedIn}
         userData={userData}
         component={Profile}
+        onLogout={handleLogout}
       />
       <Route path="/sign-up">
         <Register onRegister={handleRegister} />
@@ -109,29 +119,3 @@ const App = () => {
 };
 
 export default App;
-
-/* <Route path="*">
-          <PageNotFound />
-        </Route>
-
-
-
-      function App() {
-  return (
-    <Switch>
-      <Route path="/sign-up">
-        <Register />
-      </Route>
-      <Route path="/sign-in">
-        <Login />
-      </Route>
-      <Route path="/profile">
-        <Profile />
-      </Route>
-      <Route path="*">
-        <PageNotFound />
-      </Route>
-    </Switch>
-  );
-}
-      */
