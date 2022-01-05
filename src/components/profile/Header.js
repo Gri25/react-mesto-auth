@@ -1,5 +1,4 @@
 import logo from "../../images/Vector.svg";
-
 // имейл отрисовывается только после обновления страницы, подскажите пожалуйстаа что не так
 
 function Header(props) {

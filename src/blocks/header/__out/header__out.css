@@ -8,7 +8,7 @@
   text-decoration: none;
   flex-wrap: nowrap;
   border: none;
-  height: 22px;/*для того что бы кнопка не выходила за свои пределы*/
+  height: 22px;/*что бы кнопка не выходила за свои пределы*/
   transition: opacity 0.3s linear;
   background-color: black;
   border: none;
