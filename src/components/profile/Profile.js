@@ -149,6 +149,7 @@ function Profile({ userData, onLogout }) {
       isOpen={ishandleHeaderPopupClick}
       onClose={closeAllPopups} 
       onLogout={onLogout}
+      userData={userData}
       />
       <Header
         onHeaderPopup={handleHeaderPopupClick}

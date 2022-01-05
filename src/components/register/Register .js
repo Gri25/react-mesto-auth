@@ -5,7 +5,7 @@ import InfoTooltip from "./InfoTooltip";
 import * as auth from "../auth.js";
 import App from "../App";
 
-const Register = ({ onRegister }) => {
+const Register = ({ onRegister, onClose, isToOpen, isDontOpen }) => {
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -27,32 +27,14 @@ const Register = ({ onRegister }) => {
     onRegister({ email, password });
   };
 
-  const [isToRegisterPopupOpen, setIsToRegisterPopupOpen] =
-    React.useState(false);
 
-  const [isDontRegisterPopupOpen, setIsDontRegisterPopupOpen] =
-    React.useState(false);
-
-  function handleToRegisterPopupOpen() {
-    setIsToRegisterPopupOpen(true);
-  }
-
-  function handleDontRegisterPopupOpen() {
-    setIsDontRegisterPopupOpen(true);
-  }
-
-  //вот тут функция закрытия попапов
-  function closeAllRegistrePopups() {
-    setIsToRegisterPopupOpen(false);
-    setIsDontRegisterPopupOpen(false);
-  }
 
   return (
     <>
       <InfoTooltip
-        onClose={closeAllRegistrePopups}
-        //   isToOpen={isToRegisterPopupOpen}
-        //   isDontOpen={isDontRegisterPopupOpen}
+        onClose={onClose}
+        isToOpen={isToOpen}
+        isDontOpen={isDontOpen}
       />
 
       <header className="header">

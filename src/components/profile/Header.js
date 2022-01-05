@@ -1,15 +1,11 @@
 import logo from "../../images/Vector.svg";
-import { Link, useHistory } from "react-router-dom";
 
-function Header({ onLogout, userData }, props) {
-  const history = useHistory();
- // let { email, password } = userData;
+// имейл отрисовывается только после обновления страницы, подскажите пожалуйстаа что не так
+
+function Header(props) {
   const onHeaderPopup = () => {
     props.onHeaderPopup();
   };
-  //function signOut() {
-  //  localStorage.removeItem("jwt");
-  //}
 
   return (
     <header className="header">
@@ -22,8 +18,8 @@ function Header({ onLogout, userData }, props) {
         onClick={onHeaderPopup}
       ></button>
       <div className="header__bar">
-        <p className="header__mail">{userData.email}</p>
-        <button onClick={onLogout}  className="header__out">
+        <p className="header__mail">{props.userData.email}</p>
+        <button onClick={props.onLogout} className="header__out">
           Выйти
         </button>
       </div>

@@ -16,7 +16,7 @@ const App = () => {
     password: "",
   });
 
-  console.log(userData)
+ // console.log(userData);
 
   const history = useHistory();
 
@@ -38,10 +38,11 @@ const App = () => {
       // проверим токен
       auth.getContent(token).then((data) => {
         if (data) {
+        //  console.log(data.data);
           // здесь можем получить данные пользователя!
           const userData = {
-            email: data.email,
-            password: data.password,
+            email: data.data.email,
+         //   password: data.password,
           };
           localStorage.setItem("token", token);
           setUserData(userData);
@@ -67,6 +68,31 @@ const App = () => {
       .catch((error) => console.error(error));
   };
 
+
+  const [isToRegisterPopupOpen, setIsToRegisterPopupOpen] =
+    React.useState(false);
+
+  const [isDontRegisterPopupOpen, setIsDontRegisterPopupOpen] =
+    React.useState(false);
+
+  function handleToRegisterPopupOpen() {
+    setIsToRegisterPopupOpen(true);
+  }
+
+  function handleDontRegisterPopupOpen() {
+    setIsDontRegisterPopupOpen(true);
+  }
+
+  //вот тут функция закрытия попапов
+  function closeAllRegistrePopups() {
+    if(isToRegisterPopupOpen) {
+      history.push("/sign-in");
+    }
+    setIsToRegisterPopupOpen(false);
+    setIsDontRegisterPopupOpen(false);
+  }
+  
+
   const handleRegister = ({ email, password }) => {
   //  console.log(email, password);
     auth
@@ -79,10 +105,14 @@ const App = () => {
             password,
           });
         //  console.log(data);
-          history.push("/sign-in");
+          
+          handleToRegisterPopupOpen();
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        handleDontRegisterPopupOpen();
+      });
     // тут видимо что-то нужно написать для попапа
   };
 
@@ -106,7 +136,12 @@ const App = () => {
         onLogout={handleLogout}
       />
       <Route path="/sign-up">
-        <Register onRegister={handleRegister} />
+        <Register onRegister={handleRegister}
+                onClose={closeAllRegistrePopups}
+                isToOpen={isToRegisterPopupOpen}
+                isDontOpen={isDontRegisterPopupOpen}
+
+        />
       </Route>
       <Route path="/sign-in">
         <Login onLogin={handleLogin} tokenCheck={tokenCheck} />
