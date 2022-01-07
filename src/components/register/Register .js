@@ -1,9 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../../images/Vector.svg";
 import InfoTooltip from "./InfoTooltip";
 import * as auth from "../auth.js";
-import App from "../App";
+import Header from "./Header.js";
 
 const Register = ({ onRegister, onClose, isToOpen, isDontOpen }) => {
   const [data, setData] = React.useState({
@@ -27,8 +26,6 @@ const Register = ({ onRegister, onClose, isToOpen, isDontOpen }) => {
     onRegister({ email, password });
   };
 
-
-
   return (
     <>
       <InfoTooltip
@@ -37,12 +34,8 @@ const Register = ({ onRegister, onClose, isToOpen, isDontOpen }) => {
         isDontOpen={isDontOpen}
       />
 
-      <header className="header">
-        <img src={logo} className="header__logo" alt="Место-Россия" />
-        <Link to="/sign-in" className="header__register">
-          Войти
-        </Link>
-      </header>
+      <Header />
+
       <main className="first-page">
         <h1 className="first-page__text">Регистрация</h1>
         <form onSubmit={handleSubmit} className="first-page__form">
@@ -73,7 +66,6 @@ const Register = ({ onRegister, onClose, isToOpen, isDontOpen }) => {
           Уже зарегистрированы? Войти
         </Link>
       </main>
-      <InfoTooltip />
     </>
   );
 };

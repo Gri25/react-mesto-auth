@@ -16,7 +16,7 @@ const App = () => {
     password: "",
   });
 
- // console.log(userData);
+  // console.log(userData);
 
   const history = useHistory();
 
@@ -38,11 +38,11 @@ const App = () => {
       // проверим токен
       auth.getContent(token).then((data) => {
         if (data) {
-        //  console.log(data.data);
+          //  console.log(data.data);
           // здесь можем получить данные пользователя!
           const userData = {
             email: data.data.email,
-         //   password: data.password,
+            //          password: data.data._id,
           };
           localStorage.setItem("token", token);
           setUserData(userData);
@@ -64,10 +64,10 @@ const App = () => {
           localStorage.setItem("token", data.token);
           setLoggedIn(true);
         }
+        tokenCheck();
       })
       .catch((error) => console.error(error));
   };
-
 
   const [isToRegisterPopupOpen, setIsToRegisterPopupOpen] =
     React.useState(false);
@@ -85,27 +85,26 @@ const App = () => {
 
   //вот тут функция закрытия попапов
   function closeAllRegistrePopups() {
-    if(isToRegisterPopupOpen) {
+    if (isToRegisterPopupOpen) {
       history.push("/sign-in");
     }
     setIsToRegisterPopupOpen(false);
     setIsDontRegisterPopupOpen(false);
   }
-  
 
   const handleRegister = ({ email, password }) => {
-  //  console.log(email, password);
+    //  console.log(email, password);
     auth
       .register({ email, password })
       .then((data) => {
         if (data) {
-          const { email } = data;
+          //  const { email } = data;
           setUserData({
             email,
             password,
           });
-        //  console.log(data);
-          
+          //  console.log(data);
+
           handleToRegisterPopupOpen();
         }
       })
@@ -128,6 +127,7 @@ const App = () => {
 
   return (
     <Switch>
+      
       <ProtectedRoute
         path="/profile"
         loggedIn={loggedIn}
@@ -136,11 +136,11 @@ const App = () => {
         onLogout={handleLogout}
       />
       <Route path="/sign-up">
-        <Register onRegister={handleRegister}
-                onClose={closeAllRegistrePopups}
-                isToOpen={isToRegisterPopupOpen}
-                isDontOpen={isDontRegisterPopupOpen}
-
+        <Register
+          onRegister={handleRegister}
+          onClose={closeAllRegistrePopups}
+          isToOpen={isToRegisterPopupOpen}
+          isDontOpen={isDontRegisterPopupOpen}
         />
       </Route>
       <Route path="/sign-in">

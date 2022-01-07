@@ -1,7 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import logo from "../../images/Vector.svg";
 import * as auth from "../auth.js";
+import Header from "./Header.js";
 
 const Login = ({ onLogin }) => {
   const [data, setData] = React.useState({
@@ -27,12 +26,7 @@ const Login = ({ onLogin }) => {
 
   return (
     <>
-      <header className="header">
-        <img src={logo} className="header__logo" alt="Место-Россия" />
-        <Link to="/sign-up" className="header__register">
-          Регистрация
-        </Link>
-      </header>
+      <Header />
 
       <main className="first-page">
         <h1 className="first-page__text">Вход</h1>

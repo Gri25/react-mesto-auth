@@ -14,8 +14,6 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 //не могу понять как реализовать плавное закрытие хедер попапа на 320px, додумался только до плавного открытия через кейфрейм
 // если есть идеи, подскажите пожалуйста
 function Profile({ userData, onLogout }) {
-  
-
   const [currentUser, setcurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
@@ -41,8 +39,7 @@ function Profile({ userData, onLogout }) {
     name: "",
   });
 
-  const [ishandleHeaderPopupClick, setIshandleHeaderPopupClick] =
-    React.useState(false);
+  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = React.useState(false);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -53,18 +50,25 @@ function Profile({ userData, onLogout }) {
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
   }
-  function handleHeaderPopupClick() {
-    setIshandleHeaderPopupClick(true);
+
+  function openBurgerMenu() {
+    setIsBurgerMenuOpen(true);
   }
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
-
     // Отправляем запрос в API и получаем обновлённые данные карточки
-    api.changeLikeCardStatus(card._id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
-    });
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => {
+        console.log(err); // выведем ошибку в консоль(исправил)
+      });
   }
 
   const handleClick = (card) => {
@@ -135,7 +139,7 @@ function Profile({ userData, onLogout }) {
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
-    setIshandleHeaderPopupClick(false);
+    setIsBurgerMenuOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
     setImagePopupOpen(false);
@@ -143,17 +147,29 @@ function Profile({ userData, onLogout }) {
     setSelectedCard({ name: "", link: "" });
   }
 
+  React.useEffect(() => {//спасибо за подсказку, я как раз думал как это сделать
+    const closeByEscape = (e) => {
+      if (e.key === "Escape") {
+        closeAllPopups();
+      }
+    };
+
+    document.addEventListener("keydown", closeByEscape);
+
+    return () => document.removeEventListener("keydown", closeByEscape);
+  }, []);
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <HeaderPopup 
-      isOpen={ishandleHeaderPopupClick}
-      onClose={closeAllPopups} 
-      onLogout={onLogout}
-      userData={userData}
+      <HeaderPopup
+        isOpen={isBurgerMenuOpen}
+        onClose={closeAllPopups}
+        onLogout={onLogout}
+        userData={userData}
       />
       <Header
-        onHeaderPopup={handleHeaderPopupClick}
-        isOpen={ishandleHeaderPopupClick}
+        onHeaderPopup={openBurgerMenu}
+        isOpen={isBurgerMenuOpen}
         onLogout={onLogout}
         userData={userData}
       />
