@@ -1,10 +1,6 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
 
-//не могу реализовать плавное закрытие поппапа в хедере(прописал анимацию для класа на false  в тернарном операторе
-//но она почему то не работает)
-
-function HeaderPopup(props) {
+function BurgerMenu(props) {
   return (
     <>
       <div
@@ -28,4 +24,4 @@ function HeaderPopup(props) {
   );
 }
 
-export default HeaderPopup;
+export default BurgerMenu;

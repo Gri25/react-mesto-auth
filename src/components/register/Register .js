@@ -1,10 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import InfoTooltip from "./InfoTooltip";
-import * as auth from "../auth.js";
 import Header from "./Header.js";
 
-const Register = ({ onRegister, onClose, isToOpen, isDontOpen }) => {
+const Register = ({ onRegister }) => {
   const [data, setData] = React.useState({
     email: "",
     password: "",
@@ -28,12 +26,6 @@ const Register = ({ onRegister, onClose, isToOpen, isDontOpen }) => {
 
   return (
     <>
-      <InfoTooltip
-        onClose={onClose}
-        isToOpen={isToOpen}
-        isDontOpen={isDontOpen}
-      />
-
       <Header />
 
       <main className="first-page">

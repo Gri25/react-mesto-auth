@@ -1,5 +1,4 @@
 import React from "react";
-import * as auth from "../auth.js";
 import Header from "./Header.js";
 
 const Login = ({ onLogin }) => {
