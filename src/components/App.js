@@ -4,7 +4,7 @@ import Register from "./register/Register ";
 import Login from "./login/Login ";
 import { Route, Switch, Redirect, useHistory } from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute";
-import * as auth from "./auth.js";
+import * as auth from "../utils/auth.js";
 import InfoTooltip from "./register/InfoTooltip";
 import api from "../utils/Api";
 import EditProfilePopup from "./profile/EditProfilePopup";
