@@ -9,9 +9,11 @@
 @import url(../src/blocks/header/header.css);
 @import url(../src/blocks/header/__logo/header__logo.css);
 @import url(../src/blocks/header/__register/header__register.css);
+@import url(../src/blocks/header/__register/_type/header__register_type-none.css);
 @import url(../src/blocks/header/__mail/header__mail.css);
 @import url(../src/blocks/header/__out/header__out.css);
 @import url(../src/blocks/header/__bar/header__bar.css);
+@import url(../src/blocks/header/__bar/_type/header__bar_type-none.css);
 @import url(../src/blocks/header/__bar-open/header__bar-open.css);
 @import url(../src/blocks/header/__bar-open/_type/header__bar-open_type_none.css);
 

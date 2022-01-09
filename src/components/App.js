@@ -13,6 +13,8 @@ import EditAvatarPopup from "./profile/EditAvatarPopup";
 import DeletePopup from "./profile/DeletePopup";
 import AddPlacePopup from "./profile/AddPlacePopup";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import Header from "./Header";
+import BurgerMenu from "./profile/BurgerMenu";
 
 const App = () => {
   const history = useHistory();
@@ -101,18 +103,23 @@ const App = () => {
     const token = localStorage.getItem("token");
     if (token) {
       // проверим токен
-      auth.getContent(token).then((data) => {
-        if (data) {
-          // здесь можем получить данные пользователя!
-          const userData = {
-            email: data.data.email,
-            //          password: data.data._id,
-          };
-          localStorage.setItem("token", token);
-          setUserData(userData);
-          setLoggedIn(true);
-        }
-      });
+      auth
+        .getContent(token)
+        .then((data) => {
+          if (data) {
+            // здесь можем получить данные пользователя!
+            const userData = {
+              email: data.data.email,
+              //          password: data.data._id,
+            };
+            localStorage.setItem("token", token);
+            setUserData(userData);
+            setLoggedIn(true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -127,7 +134,10 @@ const App = () => {
           localStorage.setItem("token", data.token);
           setLoggedIn(true);
         }
-        tokenCheck();
+        const userData = {
+          email
+        };
+        setUserData(userData);
       })
       .catch((error) => console.error(error));
   };
@@ -244,15 +254,39 @@ const App = () => {
       });
   };
 
+  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
+
+  function openBurgerMenu() {
+    setIsBurgerMenuOpen(true);
+  }
+
+  function closeBurgerMenu() {
+    setIsBurgerMenuOpen(false);
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
+      <BurgerMenu
+        isOpen={isBurgerMenuOpen}
+        onClose={closeBurgerMenu}
+        onLogout={handleLogout}
+        userData={userData}
+      />
+
+      <Header
+        onHeaderPopup={openBurgerMenu}
+        isOpen={isBurgerMenuOpen}
+        onLogout={handleLogout}
+        userData={userData}
+        loggedIn={loggedIn}
+      />
+
       <Switch>
         <ProtectedRoute
           path="/profile"
           loggedIn={loggedIn}
           userData={userData}
           component={Profile}
-          onLogout={handleLogout}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
@@ -264,15 +298,20 @@ const App = () => {
           {" "}
         </ProtectedRoute>
         <Route path="/sign-up">
-          <Register onRegister={handleRegister} />
+          <Register onRegister={handleRegister} loggedIn={loggedIn} />
         </Route>
         <Route path="/sign-in">
-          <Login onLogin={handleLogin} tokenCheck={tokenCheck} />
+          <Login
+            onLogin={handleLogin}
+            tokenCheck={tokenCheck}
+            loggedIn={loggedIn}
+          />
         </Route>
         <Route exact path="/">
           {loggedIn ? <Redirect to="/profile" /> : <Redirect to="/sign-in" />}
         </Route>
       </Switch>
+
       <InfoTooltip
         isToOpen={isToRegisterPopupOpen}
         isDontOpen={isDontRegisterPopupOpen}
