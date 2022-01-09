@@ -271,6 +271,7 @@ const App = () => {
         onClose={closeBurgerMenu}
         onLogout={handleLogout}
         userData={userData}
+        loggedIn={loggedIn}
       />
 
       <Header

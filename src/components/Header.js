@@ -21,13 +21,21 @@ function Header(props) {
   return (
     <header className="header">
       <img src={logo} className="header__logo" alt="Место-Россия" />
-      <button
-        type="button"
-        className={`header__bar-open ${
-          props.isOpen ? "header__bar-open_type_none" : ""
-        }`}
-        onClick={onHeaderPopup}
-      ></button>
+      <div
+        className={
+          props.loggedIn
+            ? "header__burger_type-visible"
+            : "header__burger_type-none"
+        }
+      >
+        <button
+          type="button"
+          className={`header__bar-open ${
+            props.isOpen ? "header__bar-open_type_none" : ""
+          }`}
+          onClick={onHeaderPopup}
+        ></button>
+      </div>
       <div className={props.loggedIn ? "header__bar" : "header__bar_type-none"}>
         <p className="header__mail">{props.userData.email}</p>
         <button onClick={props.onLogout} className="header__out">
